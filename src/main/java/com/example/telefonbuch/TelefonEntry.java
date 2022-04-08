@@ -3,16 +3,27 @@ package com.example.telefonbuch;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class TelefonEntry {
 
     private final StringProperty lastName = new SimpleStringProperty();
     private final StringProperty firstName = new SimpleStringProperty();
     private final StringProperty number = new SimpleStringProperty();
 
-    public TelefonEntry(String name, String surname, String number) {
+    private final List<StringProperty> parameterList = new ArrayList<>();
+
+    public TelefonEntry(String name, String firstname, String number) {
         this.lastName.setValue(name);
-        this.firstName.setValue(surname);
+        parameterList.add(this.lastName);
+
+        this.firstName.setValue(firstname);
+        parameterList.add(this.firstName);
+
         this.number.setValue(number);
+        parameterList.add(this.number);
     }
 
     public String getLastName() {
@@ -40,6 +51,10 @@ public class TelefonEntry {
     }
 
     public boolean match(String str) {
+        str = str.toLowerCase();
+        for (StringProperty s : parameterList) {
+            if (s.getValue().toLowerCase().contains(str)) {return true;}
+        }
         return false;
     }
 }

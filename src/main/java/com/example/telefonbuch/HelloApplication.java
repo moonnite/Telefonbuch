@@ -1,7 +1,6 @@
 package com.example.telefonbuch;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -14,18 +13,16 @@ public class HelloApplication extends Application {
         //FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
         TelefonBook tb = new TelefonBook();
         BorderPane bp = new BorderPane();
-        FilternArea searchArea = new FilternArea();
-        EntryArea entryArea = new EntryArea(tb.getEntries());
+        FilterArea searchArea = new FilterArea(tb::filter);
+        EntryArea entryArea = new EntryArea(tb.getFilteredEntries());
+        ActionArea actionArea = new ActionArea(
+                () -> {tb.removeAll(entryArea.getSelectedEntries());},
+                tb::addEmpty
+        );
 
         bp.setTop(searchArea.getPane());
         bp.setCenter(entryArea.getPane());
-
-//        b1.onActionProperty().setValue(e->
-//        {
-//            for (TelefonEntry te : tb.getEntries()){
-//                System.out.println(te.getName() + ", " + te.getSurname() + ", " + te.getNumber());
-//            }
-//        });
+        bp.setBottom(actionArea.getPane());
 
         Scene scene = new Scene(bp, 320, 240);
 
